@@ -5,34 +5,30 @@
 
 //=================================
 // forward declared dependencies
-
+class Node;
 
 //=================================
 // included dependencies
-#include "Sorted_List.h"
-#include <string>
+#include "ListHandler.h"
 
 //=================================
 
 class Sorted_List : public ListHandler  {
 public:
   Sorted_List() = default;
-  Sorted_List(std::string infix_expr_);
-  Sorted_List(Sorted_List const & old_tree);
+  //Att göra: lägg till konstruktor som tar ett godtyckligt antal parametrar
+  Sorted_List(Sorted_List const & old_list);
   Sorted_List& operator=(Sorted_List const&);
-
   virtual ~Sorted_List() {}
-  virtual double evaluate() const;
-  virtual std::string get_postfix() const;
-  virtual std::string get_infix() const;
-  virtual AbstractNode* clone() const;
-  virtual void delete_expr_nodes();
-  virtual bool has_variable(Variable*) const;
-  virtual bool set_variable_value(Variable*);
 
-  bool empty() const;
-  void swap(Sorted_List& Expr);
-  void delete_expr(Sorted_List& Expr);
+  virtual void print() const;
+  virtual bool remove(int);
+  virtual bool remove_all();
+  virtual int get_element(int) const;
+  virtual int get_length() const;
+  virtual bool is_empty() const;
+
+  Node* first_node{};
 
 };
 #endif
