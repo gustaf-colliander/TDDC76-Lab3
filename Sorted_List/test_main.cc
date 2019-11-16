@@ -1,15 +1,7 @@
-//=================================
-// forward declared dependencies
+#define CATCH_CONFIG_RUNNER
+#include "catch.hpp"
 
-
-//=================================
-// included dependencies
-
-
-//=================================
-
-
-int main()
+int main(int argc, char* argv[])
 {
-  return 0;
+    return Catch::Session{}.run(argc, argv);
 }
