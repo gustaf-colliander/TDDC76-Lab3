@@ -17,22 +17,21 @@ using namespace std;
 
 //Körs om tom lista skapas
 Sorted_List::Sorted_List()
-  : first_node{nullptr} {}
+: first_node{nullptr} {}
 
-//   Lägger in heltalen i initializer_list (sida 110 och 244 i boken) i en vector och sortera vectorn med störst heltal på index 0.
+
+//   Lägger in heltalen i initializer_list i en vektor och sortera vektorn så största heltalet är på index 0.
 //   Skapa noderna och länka dem samman, låt medlemsvariabeln first_node peka på första noden i kedjan.
 Sorted_List::Sorted_List(initializer_list<int> lst)
 {
   Node* new_node{};
   Node* previous_node{};
   vector<int> v = lst;
-
   if (lst.size() > 0)
   {
     sort(v.begin(), v.end(), greater<int>());
     new_node = new Node{v[0], nullptr};
     previous_node = new_node;
-
     for (unsigned int i=1; i < v.size(); i++)
     {
       new_node = new Node{v[i], previous_node};
@@ -40,44 +39,106 @@ Sorted_List::Sorted_List(initializer_list<int> lst)
     }
     first_node = new_node;
   }
-
   else
-   {
-     //det här kommer inte hända. Om lst.size() == 0 så körs ju istället default konstruktorn för Sorted_List
-   }
+  {
+    //det här kommer inte hända. Om lst.size() == 0 så körs ju istället default konstruktorn för Sorted_List
+  }
 }
-
 
 //=================================
 // Sorted_List function definitions
 
-
-void Sorted_List::insert(int element)
+// Kan ta in godtyckligt antal argument. Exempel: insert({5,-3,6,2,9,...})
+void Sorted_List::insert(initializer_list<int> lst)
 {
-  Node* current_node{first_node};
-  Node* next_node{};
-  bool eol{false};
-
-  while (element > current_node->value)
+  int element{};
+  vector<int> v = lst;
+  for (unsigned int i = 0; i < v.size(); i++)
   {
-    next_node = current_node->next_node;
-    cout << "insatt element större än nuvarande nods element" << endl;
-    if (next_node == nullptr)
+    element = v[i];
+    if (empty())
     {
-      cout << "nått slutet på listan. Så element är störst av alla element" << endl;
-      eol = true;
-      // skapa och insert element korrekt i listan här med nullpekare, och ändra pekare på den noden till vänster så den pekar på nya elementet
-      break;
+      //Listan är tom.
+      Node* ins_node{new Node{element, nullptr}};
+      first_node = ins_node;
+    }
+    else if (element <= first_node->value)
+    {
+      //Insatta noden är minst av alla element i listan.
+      Node* ins_node{new Node{element, first_node}};
+      first_node = ins_node;
     }
     else
     {
-      current_node = next_node;
+      Node* current_node{first_node};
+      Node* next_node{};
+      while (element > current_node->value)
+      {
+        next_node = current_node->next_node;
+        if (next_node == nullptr)
+        {
+          //Insatta noden är störst av alla element i listan.
+          Node* ins_node{new Node{element, nullptr}};
+          current_node->next_node = ins_node;
+          break;
+        }
+        else if (element < next_node->value)
+        {
+          //Insatt nod ligger mellan de två noderna current_node och next_node i listan.
+          Node* ins_node{new Node{element, next_node}};
+          current_node->next_node = ins_node;
+          break;
+        }
+        else
+        {
+          current_node = next_node;
+        }
+      }
     }
   }
-  if (eol == false)
+}
+
+void Sorted_List::erase(int index)
+{
+  int N{size()};
+  if (empty())
   {
-    cout << "Vi har inte nått slutet på listan än men insatt element större än nuvarande nods element" << endl;
-    // skapa och insert element korrekt i listan här med pekare till next_node, och ändra pekare på den noden till vänster så den pekar på nya elementet
+    cout << "kastar undantag: tom lista" << endl;
+    // FALL 1: borttagning i tom lista.
+    // kasta undantag här
+  }
+  else if (index < 0 || index >= size())
+  {
+    cout << "kastar undantag: angivet index utanför tillåtna index" << endl;
+    // kasta undantag här
+  }
+  else
+  {
+    Node* current_node{first_node};
+    Node* previous_node{};
+    for (int i = 1; i <= index; i++)
+    {
+      previous_node = current_node;
+      current_node = current_node->next_node;
+    }
+    // FALL 2: borttaget element minst av alla element i listan.
+    if (index == 0)
+    {
+      first_node = current_node->next_node;
+      delete current_node;
+    }
+    // FALL 4: borttaget element störst.
+    else if (index == N - 1)
+    {
+      previous_node->next_node = nullptr;
+      delete current_node;
+    }
+    // FALL 3: borttaget element mellan två element.
+    else
+    {
+      previous_node->next_node = current_node->next_node;
+      delete current_node;
+    }
   }
 }
 
@@ -127,7 +188,7 @@ int Sorted_List::at(int index) const
     }
     return current_node->value;
   }
-   //har return 0 temporärt för att undvika jobbig kompilatorvarning
+  //har return 0 temporärt för att undvika jobbig kompilatorvarning
   return 0;
 }
 

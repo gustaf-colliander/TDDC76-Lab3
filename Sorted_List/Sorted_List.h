@@ -32,14 +32,14 @@ private:
 
 public:
   Sorted_List();
-  Sorted_List(std::initializer_list<int> lst);
+  Sorted_List(std::initializer_list<int>);
   Sorted_List(Sorted_List const & old_list);
   Sorted_List& operator=(Sorted_List const&);
   ~Sorted_List() {}
 
 
-  void insert(int);
-  bool erase(int);
+  void insert(std::initializer_list<int>);
+  void erase(int);
   void clear();
   int at(int) const;
   bool empty() const;
