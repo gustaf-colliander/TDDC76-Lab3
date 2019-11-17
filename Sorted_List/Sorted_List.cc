@@ -12,12 +12,52 @@
 using namespace std;
 
 
+
+
 //=================================
-// Sorted_List constructor
+// Sorted_List konstruktorer
 
 //Körs om tom lista skapas
 Sorted_List::Sorted_List()
 : first_node{nullptr} {}
+
+// Kopieringskonstruktor
+Sorted_List::Sorted_List(Sorted_List const & old_list)
+{
+  if (!old_list.empty())
+  {
+    first_node = old_list.first_node->clone();
+  }
+  else
+  {
+    first_node = nullptr;
+  }
+}
+
+// Kopieringstilldelning
+Sorted_List& Sorted_List::operator=(Sorted_List const& rhs)
+{
+  clear();
+  first_node = rhs.first_node->clone();
+  return *this;
+}
+
+// Flyttkonstruktor
+Sorted_List::Sorted_List(Sorted_List && rhs)
+: first_node{rhs.first_node}
+{
+  rhs.first_node = nullptr;
+}
+
+// Flyttilldelning
+Sorted_List& Sorted_List::operator=(Sorted_List && rhs)
+{
+  clear();
+  first_node = rhs.first_node;
+  rhs.first_node = nullptr;
+  return *this;
+}
+
 
 
 //   Lägger in heltalen i initializer_list i en vektor och sortera vektorn så största heltalet är på index 0.
@@ -46,7 +86,7 @@ Sorted_List::Sorted_List(initializer_list<int> lst)
 }
 
 //=================================
-// Sorted_List function definitions
+// Sorted_List funktioner
 
 // Kan ta in godtyckligt antal argument. Exempel: insert({5,-3,6,2,9,...})
 void Sorted_List::insert(initializer_list<int> lst)
