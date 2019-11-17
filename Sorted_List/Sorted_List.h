@@ -26,6 +26,18 @@ private:
     Node& operator=(Node const&);
     ~Node() {}
 
+    Node* clone() const
+    {
+      if (next_node != nullptr)
+      {
+        return new Node{value, next_node->clone()};
+      }
+      else
+      {
+        return new Node(value, nullptr);
+      }
+    }
+
     int value{};
     Node* next_node{};
   };
@@ -34,8 +46,13 @@ public:
   Sorted_List();
   Sorted_List(std::initializer_list<int>);
   Sorted_List(Sorted_List const & old_list);
-  Sorted_List& operator=(Sorted_List const&);
-  ~Sorted_List() {}
+  Sorted_List& operator=(Sorted_List const& rhs);
+  Sorted_List(Sorted_List && rhs);
+  Sorted_List& operator=(Sorted_List && rhs);
+
+  // Destruktor: tar bort alla Noder (minnesläckor) m.h.a. clear().
+  // Destruktorn anropas då Sorted_List går ur sin scope {} eller om delete Sorted_List* körs.
+  ~Sorted_List() {clear();}
 
 
   void insert(std::initializer_list<int>);

@@ -1,6 +1,7 @@
 //#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Sorted_List.h"
+#include <utility>
 
 TEST_CASE("Sum of ints") {
 
@@ -69,7 +70,6 @@ TEST_CASE("Sum of ints") {
    CHECK(lst333.at(8) == 15);
    CHECK(lst333.empty() == false);
    CHECK(lst333.size() == 9);
-   lst333.clear();
 
 
    // insert fyra olika fall (dubletter testas längre ned)
@@ -79,7 +79,6 @@ TEST_CASE("Sum of ints") {
    CHECK(lst3.at(0) == 7);
    CHECK(lst3.empty() == false);
    CHECK(lst3.size() == 1);
-   lst3.clear();
 
           // FALL 2: insatt element minst
    Sorted_List lst4{2,3,5,7,9};
@@ -92,7 +91,6 @@ TEST_CASE("Sum of ints") {
    CHECK(lst4.at(5) == 9);
    CHECK(lst4.empty() == false);
    CHECK(lst4.size() == 6);
-   lst4.clear();
 
 
           // FALL 3: insatt element mellan två element
@@ -106,7 +104,6 @@ TEST_CASE("Sum of ints") {
    CHECK(lst5.at(5) == 9);
    CHECK(lst5.empty() == false);
    CHECK(lst5.size() == 6);
-   lst5.clear();
 
           // FALL 4: insatt element störst
    Sorted_List lst6{2,3,5,7,9};
@@ -119,7 +116,6 @@ TEST_CASE("Sum of ints") {
    CHECK(lst6.at(5) == 14);
    CHECK(lst6.empty() == false);
    CHECK(lst6.size() == 6);
-   lst6.clear();
 
 
       // insert DUBLETTER fyra olika fall
@@ -130,7 +126,6 @@ TEST_CASE("Sum of ints") {
       CHECK(lst33.at(1) == 7);
       CHECK(lst33.empty() == false);
       CHECK(lst33.size() == 2);
-      lst33.clear();
 
              // FALL 2: insatta element minst
       Sorted_List lst44{2,3,5,7,9};
@@ -144,7 +139,6 @@ TEST_CASE("Sum of ints") {
       CHECK(lst44.at(6) == 9);
       CHECK(lst44.empty() == false);
       CHECK(lst44.size() == 7);
-      lst44.clear();
 
 
              // FALL 3: insatta element mellan två element
@@ -159,7 +153,6 @@ TEST_CASE("Sum of ints") {
       CHECK(lst55.at(6) == 9);
       CHECK(lst55.empty() == false);
       CHECK(lst55.size() == 7);
-      lst55.clear();
 
              // FALL 4: insatta element störst
       Sorted_List lst66{2,3,5,7,9};
@@ -173,7 +166,6 @@ TEST_CASE("Sum of ints") {
       CHECK(lst66.at(6) == 23);
       CHECK(lst66.empty() == false);
       CHECK(lst66.size() == 7);
-      lst66.clear();
 
 
 
@@ -193,7 +185,6 @@ TEST_CASE("Sum of ints") {
    CHECK(lst7.at(3) == 9);
    CHECK(lst7.empty() == false);
    CHECK(lst7.size() == 4);
-   lst7.clear();
 
 
 
@@ -206,7 +197,6 @@ TEST_CASE("Sum of ints") {
    CHECK(lst8.at(3) == 9);
    CHECK(lst8.empty() == false);
    CHECK(lst8.size() == 4);
-   lst8.clear();
 
 
           // FALL 4: borttaget element störst
@@ -218,8 +208,71 @@ TEST_CASE("Sum of ints") {
    CHECK(lst9.at(3) == 7);
    CHECK(lst9.empty() == false);
    CHECK(lst9.size() == 4);
-   lst9.clear();
 
+
+   // Kopieringskonstruktor
+   Sorted_List lst10{2,3};
+   Sorted_List lst10_copy{lst10};
+   Sorted_List lst100{2,3};
+   Sorted_List lst100_copy{lst100};
+
+          // FALL 1: ändring i lst10 ska inte ändra på lst10_copy
+   lst10.insert({1});
+   CHECK(lst10_copy.size() == 2);
+   CHECK(lst10_copy.at(0) == 2);
+   CHECK(lst10_copy.at(1) == 3);
+
+
+          // FALL 2: ändring i lst100_copy ska inte ändra på lst100
+    lst100_copy.insert({1});
+    CHECK(lst100.size() == 2);
+    CHECK(lst100.at(0) == 2);
+    CHECK(lst100.at(1) == 3);
+
+
+    // Kopieringstilldelning
+    Sorted_List lst11{2,3};
+    Sorted_List lst11_copy = lst11;
+    Sorted_List lst111{2,3};
+    Sorted_List lst111_copy = lst111;
+
+           // FALL 1: ändring i lst11 ska inte ändra på lst11_copy
+    lst11.insert({1});
+    CHECK(lst11_copy.size() == 2);
+    CHECK(lst11_copy.at(0) == 2);
+    CHECK(lst11_copy.at(1) == 3);
+
+
+           // FALL 2: ändring i lst111_copy ska inte ändra på lst111
+     lst111_copy.insert({1});
+     CHECK(lst111.size() == 2);
+     CHECK(lst111.at(0) == 2);
+     CHECK(lst111.at(1) == 3);
+
+
+     // Flyttkonstruktor
+     Sorted_List lst12{-6,-4,3,9};
+     Sorted_List lst12_moved{std::move(lst12)};
+
+          // Innehållet i lst12 skall ha flyttats till lst12_moved
+      CHECK(lst12_moved.size() == 4);
+      CHECK(lst12_moved.at(0) == -6);
+      CHECK(lst12_moved.at(1) == -4);
+      CHECK(lst12_moved.at(2) == 3);
+      CHECK(lst12_moved.at(3) == 9);
+      CHECK(lst12.empty() == true);
+
+      // Flyttilldelning
+      Sorted_List lst122{-6,-4,3,9};
+      Sorted_List lst122_moved = std::move(lst122);
+
+           // Innehållet i lst122 skall ha flyttats till lst122_moved
+       CHECK(lst122_moved.size() == 4);
+       CHECK(lst122_moved.at(0) == -6);
+       CHECK(lst122_moved.at(1) == -4);
+       CHECK(lst122_moved.at(2) == 3);
+       CHECK(lst122_moved.at(3) == 9);
+       CHECK(lst122.empty() == true);
 
 
 
