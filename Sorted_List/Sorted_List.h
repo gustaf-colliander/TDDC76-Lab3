@@ -10,6 +10,7 @@
 // included dependencies
 #include <string>
 #include <initializer_list>
+#include <iostream>
 
 //=================================
 
@@ -62,8 +63,7 @@ public:
   bool empty() const;
   int size() const;
 
-  //Invänta svar på mail från Eric. Print kanske borde ersättas med operatorn <<
-  void print() const;
+  friend std::ostream& operator<<(std::ostream& out, const Sorted_List& lst);
 
 
 private:

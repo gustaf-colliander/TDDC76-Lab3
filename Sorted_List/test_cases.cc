@@ -278,3 +278,31 @@ TEST_CASE("Sum of ints") {
 
 
 }
+
+
+TEST_CASE("Operator <<")
+{
+
+    // Fallet Icke-tom lista med ett element
+    Sorted_List lst1 {5};
+    std::ostringstream o_ss1{};
+    o_ss1 << lst1;
+    std::string string_lst1{o_ss1.str()};
+    CHECK(string_lst1 == "{5}");
+
+    // Fallet Icke-tom lista med fler än ett element
+    Sorted_List lst {7,-4,9,-6};
+    std::ostringstream o_ss{};
+    o_ss << lst;
+    std::string string_lst{o_ss.str()};
+    CHECK(string_lst == "{-6, -4, 7, 9}");
+
+    // Fallet tom lista
+    Sorted_List empty_lst;
+    std::ostringstream o_ss2{};
+    o_ss2 << empty_lst;
+    std::string string_lst2{o_ss2.str()};
+    CHECK(string_lst2 == "{}");
+
+
+}

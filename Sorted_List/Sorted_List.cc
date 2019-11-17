@@ -246,3 +246,23 @@ void Sorted_List::clear()
     }
   }
 }
+
+
+ostream& operator<<(ostream& out, const Sorted_List& lst)
+{
+  if (lst.empty())
+  {
+    out << "{}";
+    return out;
+  }
+  else
+  {
+    out << '{' << lst.at(0);
+    for (int i = 1; i < lst.size(); i++)
+    {
+      out << ", " << lst.at(i);
+    }
+    out << '}';
+    return out;
+  }
+}
