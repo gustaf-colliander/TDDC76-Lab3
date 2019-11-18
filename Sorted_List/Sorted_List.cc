@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iostream> //debugging
+#include <exception>
 using namespace std;
 
 
@@ -143,14 +144,12 @@ void Sorted_List::erase(int index)
   int N{size()};
   if (empty())
   {
-    cout << "kastar undantag: tom lista" << endl;
     // FALL 1: borttagning i tom lista.
-    // kasta undantag här
+    throw domain_error("List is empty so we can't remove any elements.");
   }
   else if (index < 0 || index >= size())
   {
-    cout << "kastar undantag: angivet index utanför tillåtna index" << endl;
-    // kasta undantag här
+    throw out_of_range("Specified index does not belong to the list.");
   }
   else
   {
@@ -211,13 +210,11 @@ int Sorted_List::at(int index) const
 {
   if (empty())
   {
-    cout << "kastar undantag: tom lista" << endl;
-    // kasta undantag här
+    throw domain_error("List is empty so we can't access any element.");
   }
   else if (index < 0 || index >= size())
   {
-    cout << "kastar undantag: angivet index utanför tillåtna index" << endl;
-    // kasta undantag här
+    throw out_of_range("Specified index does not belong to the list.");
   }
   else
   {
@@ -228,7 +225,7 @@ int Sorted_List::at(int index) const
     }
     return current_node->value;
   }
-  //har return 0 temporärt för att undvika jobbig kompilatorvarning
+  //har return 0 här endast för att undvika kompilatorvarning
   return 0;
 }
 
