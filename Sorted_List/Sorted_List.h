@@ -22,16 +22,16 @@ private:
   public:
     Node() = default;
     Node(int value_, Node* next_node_)
-    : value{value_}, next_node{next_node_}  {}
+    : value{value_}, ptr_to_next_node{next_node_}  {}
     Node(Node const & old_node);
     Node& operator=(Node const&);
     ~Node() {}
 
     Node* clone() const
     {
-      if (next_node != nullptr)
+      if (ptr_to_next_node != nullptr)
       {
-        return new Node{value, next_node->clone()};
+        return new Node{value, ptr_to_next_node->clone()};
       }
       else
       {
@@ -40,7 +40,7 @@ private:
     }
 
     int value{};
-    Node* next_node{};
+    Node* ptr_to_next_node{};
   };
 
 public:
@@ -67,7 +67,7 @@ public:
 
 
 private:
-  Node* first_node{};
+  Node* ptr_to_first_node{};
 
 
 };
