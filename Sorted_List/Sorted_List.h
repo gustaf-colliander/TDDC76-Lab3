@@ -5,43 +5,21 @@
 
 //=================================
 // forward declared dependencies
-
 //=================================
 // included dependencies
 #include <string>
 #include <initializer_list>
+#include "Node.h"
 #include <iostream>
 
 //=================================
 
+// Komplettering: h-filen ska ge en snabb överblick över vad som finns i er klass.
+//  Därför bör de publika delarna ligga överst.
+//  Om ni behöver någon privat del för att deklarera någon publik så kan man
+//  fördeklarera (forward declaration).
+
 class Sorted_List {
-
-
-private:
-  class Node {
-  public:
-    Node() = default;
-    Node(int value_, Node* next_node_)
-    : value{value_}, ptr_to_next_node{next_node_}  {}
-    Node(Node const & old_node);
-    Node& operator=(Node const&);
-    ~Node() {}
-
-    Node* clone() const
-    {
-      if (ptr_to_next_node != nullptr)
-      {
-        return new Node{value, ptr_to_next_node->clone()};
-      }
-      else
-      {
-        return new Node(value, nullptr);
-      }
-    }
-
-    int value{};
-    Node* ptr_to_next_node{};
-  };
 
 public:
   Sorted_List();
@@ -55,7 +33,6 @@ public:
   // Destruktorn anropas då Sorted_List går ur sin scope {} eller om delete Sorted_List* körs.
   ~Sorted_List() {clear();}
 
-
   void insert(std::initializer_list<int>);
   void erase(int);
   void clear();
@@ -64,11 +41,7 @@ public:
   int size() const;
 
   friend std::ostream& operator<<(std::ostream& out, const Sorted_List& lst);
-
-
 private:
-  Node* ptr_to_first_node{};
-
-
+  Sorted_List::Node* ptr_to_first_node{};
 };
 #endif

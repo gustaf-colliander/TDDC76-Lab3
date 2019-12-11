@@ -4,6 +4,7 @@
 //=================================
 // included dependencies
 #include "Sorted_List.h"
+#include "Node.h"
 #include <initializer_list>
 #include <vector>
 #include <algorithm>
@@ -22,28 +23,11 @@ using namespace std;
 Sorted_List::Sorted_List()
 : ptr_to_first_node{nullptr} {}
 
-//   Lägger in heltalen i initializer_list i en vektor och sortera vektorn så största heltalet är på index 0.
-//   Skapa noderna och länka dem samman, låt medlemsvariabeln ptr_to_first_node peka på första noden i kedjan.
-Sorted_List::Sorted_List(initializer_list<int> lst)
+Sorted_List::Sorted_List(initializer_list<int> lst) : ptr_to_first_node{nullptr}
 {
-  Node* new_node{};
-  Node* previous_node{};
-  vector<int> v = lst;
-  if (lst.size() > 0)
+  for (int element : lst)
   {
-    sort(v.begin(), v.end(), greater<int>());
-    new_node = new Node{v[0], nullptr};
-    previous_node = new_node;
-    for (unsigned int i=1; i < v.size(); i++)
-    {
-      new_node = new Node{v[i], previous_node};
-      previous_node = new_node;
-    }
-    ptr_to_first_node = new_node;
-  }
-  else
-  {
-    //det här kommer inte hända. Om lst.size() == 0 så körs ju istället default konstruktorn för Sorted_List
+  insert(element);
   }
 }
 
@@ -64,8 +48,11 @@ Sorted_List::Sorted_List(Sorted_List const & old_list)
 // Kopieringstilldelning
 Sorted_List& Sorted_List::operator=(Sorted_List const& rhs)
 {
+  if (this != &rhs)
+  {
   clear();
   ptr_to_first_node = rhs.ptr_to_first_node->clone();
+  }
   return *this;
 }
 
@@ -79,9 +66,12 @@ Sorted_List::Sorted_List(Sorted_List && rhs)
 // Flyttilldelning
 Sorted_List& Sorted_List::operator=(Sorted_List && rhs)
 {
-  clear();
-  ptr_to_first_node = rhs.ptr_to_first_node;
-  rhs.ptr_to_first_node = nullptr;
+  if (this != &rhs)
+  {
+  Node* pointer{ptr_to_first_node};
+   ptr_to_first_node = rhs.ptr_to_first_node;
+   rhs.ptr_to_first_node = pointer;
+  }
   return *this;
 }
 
@@ -90,14 +80,8 @@ Sorted_List& Sorted_List::operator=(Sorted_List && rhs)
 //=================================
 // Sorted_List funktioner
 
-// Kan ta in godtyckligt antal argument. Exempel: insert({5,-3,6,2,9,...})
-void Sorted_List::insert(initializer_list<int> lst)
+void Sorted_List::insert(int element)
 {
-  int element{};
-  vector<int> v = lst;
-  for (unsigned int i = 0; i < v.size(); i++)
-  {
-    element = v[i];
     if (empty())
     {
       //Listan är tom.
@@ -124,7 +108,7 @@ void Sorted_List::insert(initializer_list<int> lst)
           current_node->ptr_to_next_node = ins_node;
           break;
         }
-        else if (element < ptr_to_next_node->value)
+        else if (element <= ptr_to_next_node->value)
         {
           //Insatt nod ligger mellan de två noderna current_node och ptr_to_next_node i listan.
           Node* ins_node{new Node{element, ptr_to_next_node}};
@@ -137,7 +121,6 @@ void Sorted_List::insert(initializer_list<int> lst)
         }
       }
     }
-  }
 }
 
 void Sorted_List::erase(int index)
@@ -148,7 +131,7 @@ void Sorted_List::erase(int index)
     // FALL 1: borttagning i tom lista.
     throw domain_error("List is empty so we can't remove any elements.");
   }
-  else if (index < 0 || index >= size())
+  else if (index < 0 || index >= N)
   {
     throw out_of_range("Specified index does not belong to the list.");
   }
@@ -209,11 +192,12 @@ int Sorted_List::size() const
 
 int Sorted_List::at(int index) const
 {
+  int N{size()};
   if (empty())
   {
     throw domain_error("List is empty so we can't access any element.");
   }
-  else if (index < 0 || index >= size())
+  else if (index < 0 || index >= N)
   {
     throw out_of_range("Specified index does not belong to the list.");
   }
@@ -247,6 +231,7 @@ void Sorted_List::clear()
 
 ostream& operator<<(ostream& out, const Sorted_List& lst)
 {
+  int N{lst.size()};
   if (lst.empty())
   {
     out << "{}";
@@ -255,7 +240,7 @@ ostream& operator<<(ostream& out, const Sorted_List& lst)
   else
   {
     out << '{' << lst.at(0);
-    for (int i = 1; i < lst.size(); i++)
+    for (int i = 1; i < N; i++)
     {
       out << ", " << lst.at(i);
     }
