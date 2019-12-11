@@ -4,11 +4,8 @@
 #define NODE_H
 
 //=================================
-// forward declared dependencies
-class Sorted_List;
-//=================================
 // included dependencies
-
+#include "Sorted_List.h"
 
 class Sorted_List::Node {
 

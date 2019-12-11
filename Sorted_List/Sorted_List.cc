@@ -1,7 +1,4 @@
 //=================================
-// forward declared dependencies
-
-//=================================
 // included dependencies
 #include "Sorted_List.h"
 #include "Node.h"
@@ -14,8 +11,6 @@
 using namespace std;
 
 
-
-
 //=================================
 // Sorted_List konstruktorer
 
@@ -23,7 +18,7 @@ using namespace std;
 Sorted_List::Sorted_List()
 : ptr_to_first_node{nullptr} {}
 
-Sorted_List::Sorted_List(initializer_list<int> lst) : ptr_to_first_node{nullptr}
+Sorted_List::Sorted_List(initializer_list<int> lst)
 {
   for (int element : lst)
   {
